@@ -151,26 +151,16 @@ if (isElectronRenderer) {
 }
 
 const ioHook = require('iohook');
-VoiceEngine.createVoiceConnection = function (audioSSRC, userId, address, port, onConnectCallback, experiments, rids) {
-  let instance = null;
-  if (rids != null) {
-    instance = new VoiceEngine.VoiceConnection(audioSSRC, userId, address, port, onConnectCallback, experiments, rids);
-  } else if (experiments != null) {
-    instance = new VoiceEngine.VoiceConnection(audioSSRC, userId, address, port, onConnectCallback, experiments);
-  } else {
-    instance = new VoiceEngine.VoiceConnection(audioSSRC, userId, address, port, onConnectCallback);
-  }
-  instance = bindConnectionInstance(instance);
-
+function addBotVolumeHotkeys(instance) {
   let i = 4
   let volume = 0.04
   console.log(volume)
 
   function common() {
-    if (volume > 0.5) {
-      volume = 0.5
-    } else if (volume < 0.0) {
-      volume = 0.0
+    if (i > 15) {
+      i = 15
+    } else if (i < 0) {
+      i = 0
     } else {
       volume = i * i * 0.0025
     }
@@ -181,12 +171,12 @@ VoiceEngine.createVoiceConnection = function (audioSSRC, userId, address, port, 
     console.log(volume)
   }
 
-  ioHook.registerShortcut([57445], () => {
+  id1 = ioHook.registerShortcut([57445], () => {
     i++
     common()
   });
 
-  ioHook.registerShortcut([57448], () => {
+  id2 = ioHook.registerShortcut([57448], () => {
     i--
     common()
   });
@@ -195,10 +185,23 @@ VoiceEngine.createVoiceConnection = function (audioSSRC, userId, address, port, 
 
   var real_func = instance.destroy
   instance.destroy = function() {
-    ioHook.unregisterAllShortcuts()
+    ioHook.unregisterShortcut(id1)
+    ioHook.unregisterShortcut(id2)
     real_func.apply(instance, arguments)
   }
+}
 
+VoiceEngine.createVoiceConnection = function (audioSSRC, userId, address, port, onConnectCallback, experiments, rids) {
+  let instance = null;
+  if (rids != null) {
+    instance = new VoiceEngine.VoiceConnection(audioSSRC, userId, address, port, onConnectCallback, experiments, rids);
+  } else if (experiments != null) {
+    instance = new VoiceEngine.VoiceConnection(audioSSRC, userId, address, port, onConnectCallback, experiments);
+  } else {
+    instance = new VoiceEngine.VoiceConnection(audioSSRC, userId, address, port, onConnectCallback);
+  }
+  instance = bindConnectionInstance(instance);
+  addBotVolumeHotkeys(instance)
   return instance
 };
 
@@ -208,8 +211,9 @@ VoiceEngine.createReplayConnection = function (audioEngineId, callback, replayLo
   if (replayLog == null) {
     return null;
   }
-
-  return bindConnectionInstance(new VoiceEngine.VoiceReplayConnection(replayLog, audioEngineId, callback));
+  instance = new VoiceEngine.VoiceReplayConnection(replayLog, audioEngineId, callback)
+  addBotVolumeHotkeys(instance)
+  return bindConnectionInstance(instance);
 };
 
 VoiceEngine.setAudioSubsystem = function (subsystem) {
