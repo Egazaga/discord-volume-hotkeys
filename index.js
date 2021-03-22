@@ -181,6 +181,10 @@ function addBotVolumeHotkeys(instance) {
     common()
   });
 
+  // ioHook.on('keydown', event => {
+  //   console.log("Pressed", event.keycode);
+  // });
+
   ioHook.start(true);
 
   var real_func = instance.destroy
