@@ -1,7 +1,7 @@
 c:
 cd %LocalAppData%\Discord\app-1.0.9001\modules\discord_voice-1\discord_voice\
-npm init -y
-npm install iohook
+call npm init -y
+call npm install iohook
 
 mkdir %LocalAppData%\Discord\app-1.0.9001\modules\discord_voice-1\discord_voice\node_modules\iohook\builds\electron-v80-win32-ia32
 :: cd to script's path
