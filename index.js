@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const yargs = require('yargs');
 
+var key_codes_up = [57445]
+var key_codes_down = [57448]
+
 const isElectronRenderer =
   typeof window !== 'undefined' && window != null && window.DiscordNative && window.DiscordNative.isRenderer;
 
@@ -171,12 +174,12 @@ function addBotVolumeHotkeys(instance) {
     console.log(volume)
   }
 
-  id1 = ioHook.registerShortcut([57445], () => {
+  id1 = ioHook.registerShortcut(key_codes_up, () => {
     i++
     common()
   });
 
-  id2 = ioHook.registerShortcut([57448], () => {
+  id2 = ioHook.registerShortcut(key_codes_down, () => {
     i--
     common()
   });
