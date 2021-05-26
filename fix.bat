@@ -1,1 +1,1 @@
-copy index.js %LocalAppData%\Discord\app-1.0.9002\modules\discord_voice-1\discord_voice\
+copy index.js %LocalAppData%\Discord\app-1.0.9002\modules\discord_voice-2\discord_voice\
