@@ -1,5 +1,5 @@
 c:
-set root="%LocalAppData%\Discord\app-1.0.9002\modules\discord_voice-4\discord_voice\"
+set root="%LocalAppData%\Discord\app-1.0.9002\modules\discord_voice-5\discord_voice\"
 echo %root%
 cd %root%
 call npm init -y
